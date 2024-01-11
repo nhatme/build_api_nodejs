@@ -3,34 +3,10 @@ import mongoose from 'mongoose'
 import Order from '../model/order.js'
 import Product from '../model/product.js'
 import checkAuth from '../middleware/check-auth.js'
+import { orderMethod } from '../controller/orders.js'
 const router = express.Router()
 
-router.get('/', checkAuth, (req, res, next) => {
-    Order.find()
-        .select('product quantity _id')
-        .populate('product', 'name')
-        .exec()
-        .then(docs => {
-            const response = {
-                count: docs.length,
-                orders: docs.map(doc => {
-                    return {
-                        id: doc._id,
-                        productId: doc.product,
-                        quantity: doc.quantity,
-                        request: {
-                            type: 'GET',
-                            url: `http://localhost:3002/orders/${doc._id}`
-                        }
-                    }
-                })
-            }
-            res.status(200).json(response)
-        })
-        .catch(err => {
-            res.status(500).json({ err: err })
-        })
-})
+router.get('/', checkAuth, orderMethod.order_get_all)
 
 router.post('/', checkAuth, (req, res, next) => {
 
