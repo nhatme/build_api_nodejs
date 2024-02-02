@@ -6,6 +6,21 @@ import { format } from 'date-fns'
 
 const timestamp = format(new Date(), "yyyy-MM-dd'  'HH:mm:ss");
 
+const users_get_all = (req, res, next) => {
+    User.find()
+        .exec()
+        .then(result => {
+            res.status(200).json({ result })
+        })
+        .catch(err => {
+            // console.log(err)
+            res.status(500).json({
+                status: false,
+                message: err
+            })
+        })
+}
+
 const users_signup = (req, res, next) => {
     User.find({ email: req.body.email })
         .exec()
@@ -116,6 +131,7 @@ const users_delete_one = (req, res, next) => {
 }
 
 export const usersMethod = {
+    users_get_all,
     users_signup,
     users_login,
     users_delete_one

@@ -67,7 +67,6 @@ const orders_create_order = (req, res, next) => {
             })
         })
 
-
     let qty = null
     if (req.body.quantity == "") {
         qty = 1
@@ -104,7 +103,7 @@ const orders_create_order = (req, res, next) => {
         })
 }
 
-const orders_get_followed_id = (req, res, next) => {
+const orders_getOne_by_id = (req, res, next) => {
     Order.findById(req.params.orderId)
         .populate('product')
         .exec()
@@ -153,6 +152,6 @@ const orders_delete_one = (req, res, next) => {
 export const orderMethod = {
     orders_get_all,
     orders_create_order,
-    orders_get_followed_id,
+    orders_getOne_by_id,
     orders_delete_one
 }

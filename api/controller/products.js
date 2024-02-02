@@ -38,16 +38,18 @@ const products_get_all = async (req, res, next) => {
 }
 
 const products_create_one = (req, res, next) => {
+    const path = req.file.path
+    const pathOk = path.replace("\\", "/")
+
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         price: req.body.price,
-        imageProduct: req.file.path,
+        imageProduct: pathOk,
         description: req.body.description,
         review: req.body.review,
         isFavorite: req.body.isFavorite
     })
-    console.log(req.file.path);
 
     product
         .save()
@@ -68,12 +70,13 @@ const products_create_one = (req, res, next) => {
         .catch(err => {
             console.log(err)
             res.status(500).json({
+                status: false,
                 message: err
             })
         })
 }
 
-const products_get_one_followed_id = (req, res, next) => {
+const products_getOne_by_id = (req, res, next) => {
     const id = req.params.productId
     Product.findById(id)
         // .select('name price _id imageProduct')
@@ -82,6 +85,7 @@ const products_get_one_followed_id = (req, res, next) => {
             res.status(200).json({
                 status: true,
                 message: "success",
+                id: id,
                 product: {
                     name: doc.name,
                     price: doc.price,
@@ -105,7 +109,16 @@ const products_get_one_followed_id = (req, res, next) => {
 
 const products_update_one = (req, res, next) => {
 
-    Product.findByIdAndUpdate({ _id: req.params.productId }, { $set: { name: req.body.newName, price: req.body.newPrice } }, { new: true })
+    Product.findByIdAndUpdate(
+        { _id: req.params.productId },
+        {
+            $set: {
+                name: req.body.newName,
+                price: req.body.newPrice
+            }
+        },
+        { new: true }
+    )
         .exec()
         .then(result => {
             res.status(200).json({
@@ -151,7 +164,7 @@ const products_delete_one = (req, res, next) => {
 export const productMethod = {
     products_get_all,
     products_create_one,
-    products_get_one_followed_id,
+    products_getOne_by_id,
     products_update_one,
     products_delete_one
 }

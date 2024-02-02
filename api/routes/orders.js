@@ -7,7 +7,7 @@ router.get('/', checkAuth, orderMethod.orders_get_all)
 
 router.post('/', checkAuth, orderMethod.orders_create_order)
 
-router.get('/:orderId', checkAuth, orderMethod.orders_get_followed_id)
+router.get('/:orderId', checkAuth, orderMethod.orders_getOne_by_id)
 
 router.delete('/:orderId', checkAuth, orderMethod.orders_delete_one)
 

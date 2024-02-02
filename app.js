@@ -5,6 +5,8 @@ import mongoose from 'mongoose'
 import productRoutes from './api/routes/products.js'
 import orderRoutes from './api/routes/orders.js'
 import userRoutes from './api/routes/users.js'
+import authorRoutes from './api/routes/authors.js'
+import vendorRoutes from './api/routes/vendors.js'
 
 const app = express()
 mongoose.connect(`mongodb+srv://nhatchimp12:${"nhatphan"}@nodejs-api.hmafo79.mongodb.net/`)
@@ -33,6 +35,8 @@ app.use((req, res, next) => {
 app.use('/products', productRoutes)
 app.use('/orders', orderRoutes)
 app.use('/users', userRoutes)
+app.use('/authors', authorRoutes)
+app.use('/vendors', vendorRoutes)
 
 app.use((req, res, next) => {
     const error = new Error('Not found')
